@@ -3,13 +3,13 @@ provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
-  region: eu-west-1
+  region: eu-central-1
   webpack:
     webpackConfig: 'webpack.config.js'
     includeModules: true
     packager: 'npm'
     packExternalModulesMaxBuffer: 204800
 functions:
-  hello: ${file(apps/hello-app/src/functions/hello/hello.yml)}
+  getLocations: ${file(apps/tide-api/src/functions/getLocations/getLocations.yml)}
 plugins:
   - serverless-webpack

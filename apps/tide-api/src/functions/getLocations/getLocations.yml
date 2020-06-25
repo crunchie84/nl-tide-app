@@ -1,0 +1,6 @@
+handler: apps/tide-api/src/functions/getLocations/index.handler
+description: Retrieve locations of which Tide info is available
+events:
+  - http:
+      path: /api/locations
+      method: get
