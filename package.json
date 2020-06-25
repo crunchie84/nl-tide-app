@@ -27,12 +27,13 @@
   },
   "private": true,
   "dependencies": {
-    "document-register-element": "1.13.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
     "@nestjs/common": "^6.8.3",
     "@nestjs/core": "^6.8.3",
     "@nestjs/platform-express": "^6.8.3",
+    "aws-lambda": "^1.0.6",
+    "document-register-element": "1.13.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
@@ -40,10 +41,13 @@
     "@babel/preset-env": "7.9.6",
     "@babel/preset-react": "7.9.4",
     "@babel/preset-typescript": "7.9.0",
+    "@nestjs/schematics": "^6.7.0",
+    "@nestjs/testing": "^6.8.3",
     "@nrwl/cypress": "9.4.5",
     "@nrwl/eslint-plugin-nx": "9.4.5",
     "@nrwl/jest": "9.4.5",
     "@nrwl/nest": "^9.4.5",
+    "@nrwl/node": "9.4.5",
     "@nrwl/react": "9.4.5",
     "@nrwl/web": "9.4.5",
     "@nrwl/workspace": "9.4.5",
@@ -66,12 +70,12 @@
     "eslint-plugin-react-hooks": "4.0.2",
     "jest": "25.2.3",
     "prettier": "2.0.4",
+    "serverless": "^1.73.1",
+    "serverless-webpack": "^5.3.2",
     "ts-jest": "25.2.1",
     "ts-node": "~7.0.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "~6.0.0",
-    "typescript": "~3.8.3",
-    "@nrwl/node": "9.4.5",
-    "@nestjs/schematics": "^6.7.0",
-    "@nestjs/testing": "^6.8.3"
+    "typescript": "~3.8.3"
   }
 }
