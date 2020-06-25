@@ -1,6 +1,6 @@
 {
   "name": "nl-tide-app",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -71,6 +71,7 @@
     "jest": "25.2.3",
     "prettier": "2.0.4",
     "serverless": "^1.73.1",
+    "serverless-plugin-git-variables": "^4.0.0",
     "serverless-webpack": "^5.3.2",
     "ts-jest": "25.2.1",
     "ts-node": "~7.0.0",

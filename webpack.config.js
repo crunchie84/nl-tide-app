@@ -27,7 +27,15 @@ module.exports = {
     ]
   },
   plugins: [],
-  mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
+  mode: slsw.lib.webpack.isLocal || slsw.lib.options.stage === '' || slsw.lib.options.stage === 'dev'
+    ? 'development'
+    : 'production',
+  optimization: {
+    // do not minimize when deploying to development or running locally
+    minimize: slsw.lib.webpack.isLocal || slsw.lib.options.stage === '' || slsw.lib.options.stage === 'dev'
+      ? false
+      : true
+  },
   stats: 'minimal', // errors-only, minimal, none, normal, verbose
   output: {
     libraryTarget: 'commonjs',
