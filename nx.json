@@ -25,6 +25,9 @@
     "web-app-e2e": {
       "tags": [],
       "implicitDependencies": ["web-app"]
+    },
+    "api": {
+      "tags": []
     }
   }
 }

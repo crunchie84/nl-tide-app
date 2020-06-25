@@ -96,3 +96,9 @@ When no data is present in our database for the given `location` but the locatio
 
 The given `location` is not known.
 
+
+
+## development notes
+
+`nx serve api` to start the api in dev mode
+`nx serve web-app` to start the web-app
