@@ -19,7 +19,9 @@
               "apps/web-app/src/favicon.ico",
               "apps/web-app/src/assets"
             ],
-            "styles": ["apps/web-app/src/styles.css"],
+            "styles": [
+              "apps/web-app/src/styles.css"
+            ],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -68,7 +70,10 @@
               "apps/web-app/tsconfig.app.json",
               "apps/web-app/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/web-app/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/web-app/**/*"
+            ]
           }
         },
         "test": {
@@ -103,8 +108,13 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["apps/web-app-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/web-app-e2e/**/*"]
+            "tsConfig": [
+              "apps/web-app-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/web-app-e2e/**/*"
+            ]
           }
         }
       }
@@ -122,7 +132,9 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": [
+              "apps/api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -152,7 +164,10 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/api/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/api/**/*"
+            ]
           }
         },
         "test": {
@@ -179,7 +194,10 @@
               "libs/common/tsconfig.lib.json",
               "libs/common/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/common/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/common/**/*"
+            ]
           }
         },
         "test": {
@@ -187,6 +205,67 @@
           "options": {
             "jestConfig": "libs/common/jest.config.js",
             "tsConfig": "libs/common/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "tide-api": {
+      "root": "apps/tide-api",
+      "sourceRoot": "apps/tide-api/src",
+      "projectType": "application",
+      "prefix": "tide-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/tide-api",
+            "main": "apps/tide-api/src/main.ts",
+            "tsConfig": "apps/tide-api/tsconfig.app.json",
+            "assets": [
+              "apps/tide-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/tide-api/src/environments/environment.ts",
+                  "with": "apps/tide-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "tide-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/tide-api/tsconfig.app.json",
+              "apps/tide-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/tide-api/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/tide-api/jest.config.js",
+            "tsConfig": "apps/tide-api/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
