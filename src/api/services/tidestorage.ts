@@ -1,6 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
 import { TideInfo } from '../../lib/common';
-//const dynamo = new DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 const TIDE_INFO_TABLE_NAME = 'TideInfo';
 const TIDE_INFO_TABLE_PK_NAME = 'locationCodeYear';
