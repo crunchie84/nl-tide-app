@@ -24,7 +24,7 @@ jobs:
     - name: serverless API deploy
       uses: serverless/github-action@v1.53.0
       with:
-        args: deploy --config src/api/serverless.yml --aws-profile marks-playground
+        args: deploy --config src/api/serverless.yml
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
