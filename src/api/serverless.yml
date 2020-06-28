@@ -10,6 +10,19 @@ provider:
     GIT_SHA1: ${env:GITHUB_SHA, 'local-non-ci-build'}
     GIT_BRANCH: ${env:GITHUB_REF, 'no-branch-ref-known'}
     APP_VERSION: ${file(./package.json):version}
+  iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - dynamodb:Query
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    Resource:
+      Fn::GetAtt:
+        - TideInfoTable
+        - Arn
 package:
   individually: true
   excludeDevDependencies: true
@@ -19,3 +32,19 @@ functions:
 plugins:
 #  - serverless-webpack
   - serverless-plugin-typescript
+
+resources:
+  Resources:
+    TideInfoTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: locationCodeYear
+            AttributeType: S
+        KeySchema:
+          # concatinated PK, we only access by locationCode + year anyway
+          - AttributeName: locationCodeYear
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: 'TideInfo'
