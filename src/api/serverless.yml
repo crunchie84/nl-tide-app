@@ -15,6 +15,7 @@ package:
   excludeDevDependencies: true
 functions:
   getLocations: ${file(src/api/functions/getLocations/getLocations.yml)}
+  getTide: ${file(src/api/functions/getTide/getTide.yml)}
 plugins:
 #  - serverless-webpack
   - serverless-plugin-typescript

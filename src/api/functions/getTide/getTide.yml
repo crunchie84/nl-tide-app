@@ -1,0 +1,12 @@
+handler: src/api/functions/getTide/index.handler
+description: Retrieve tide information for given location on given date
+timeout: 1
+events:
+  - http:
+      path: /api/tide/{locationcode}/{date}
+      method: get
+      request:
+        parameters:
+          paths:
+            locationcode: true
+            date: true
