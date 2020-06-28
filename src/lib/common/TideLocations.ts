@@ -1,4 +1,4 @@
-import { Location } from './common';
+import { Location } from './Location';
 
 /**
  * based on view-source:https://getij.rws.nl/
