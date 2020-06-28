@@ -24,6 +24,7 @@ resources:
   Resources:
     TideInfoTable:
       Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           - AttributeName: locationCode
