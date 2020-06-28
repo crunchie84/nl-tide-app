@@ -10,6 +10,19 @@ provider:
     GIT_SHA1: ${env:GITHUB_SHA, 'local-non-ci-build'}
     GIT_BRANCH: ${env:GITHUB_REF, 'no-branch-ref-known'}
     APP_VERSION: ${file(./package.json):version}
+  iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - dynamodb:Query
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    Resource:
+      Fn::GetAtt:
+        - TideInfoTable
+        - Arn
 package:
   individually: true
   excludeDevDependencies: true
