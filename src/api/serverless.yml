@@ -1,0 +1,21 @@
+service: tide-api
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-central-1
+  memorySize: 256 # default 1024 is way to much for nodejs
+  logRetentionInDays: 14 # long enough for my purposes
+  stackTags:
+    GIT_SHA1: ${git:commit}
+    GIT_BRANCH: ${git:branch}
+    APP_VERSION: ${file(./package.json):version}
+package:
+  individually: true
+  excludeDevDependencies: true
+functions:
+  getLocations: ${file(src/api/functions/getLocations/getLocations.yml)}
+plugins:
+#  - serverless-webpack
+  - serverless-plugin-typescript
+  - serverless-plugin-git-variables

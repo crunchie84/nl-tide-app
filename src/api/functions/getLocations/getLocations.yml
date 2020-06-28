@@ -1,0 +1,7 @@
+handler: src/api/functions/getLocations/index.handler
+description: Retrieve locations of which tide info is available
+timeout: 1
+events:
+  - http:
+      path: /api/locations
+      method: get
