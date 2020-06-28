@@ -7,8 +7,8 @@ provider:
   memorySize: 256 # default 1024 is way to much for nodejs
   logRetentionInDays: 14 # long enough for my purposes
   stackTags:
-    GIT_SHA1: ${git:commit}
-    GIT_BRANCH: ${git:branch}
+    GIT_SHA1: ${env:GITHUB_SHA, 'local-non-ci-build'}
+    GIT_BRANCH: ${env:GITHUB_REF, 'no-branch-ref-known'}
     APP_VERSION: ${file(./package.json):version}
 package:
   individually: true
@@ -19,4 +19,3 @@ functions:
 plugins:
 #  - serverless-webpack
   - serverless-plugin-typescript
-  - serverless-plugin-git-variables
