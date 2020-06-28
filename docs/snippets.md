@@ -25,3 +25,11 @@ lambda.invoke({
 ```
 
 Note that the calling lambda function's role needs to include IAM policy AWSLambdaRole. Or, you can add the following statement object to your role's existing policy: '{ "Effect": "Allow", "Action": [ "lambda:InvokeFunction" ], "Resource": ["*"] }`
+
+
+# commands
+
+sls deploy --config src/api/serverless.yml --aws-profile marks-playground
+sls invoke local --function getLocations --config src/api/serverless.yml
+npm run lint
+npm test
