@@ -2,13 +2,17 @@
  * return tide info for given location
  */
 import { Handler, Context } from 'aws-lambda';
-import { TideLocations } from '../../../lib/common';
+import { TideLocations, TideInfo } from '../../../lib/common';
 
 export interface getTideHandlerEvent {
   pathParameters: {
     locationcode: string;
     date: string;
   };
+}
+
+interface TideDateResponse extends TideInfo {
+  location: Location;
 }
 
 export const handler: Handler = async (event: getTideHandlerEvent, context: Context) => {
