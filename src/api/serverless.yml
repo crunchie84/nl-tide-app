@@ -40,15 +40,11 @@ resources:
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          - AttributeName: locationCode
-            AttributeType: S
-          - AttributeName: year
+          - AttributeName: locationCodeYear
             AttributeType: S
         KeySchema:
-          # Combined PK, we only access by locationCode + year anyway
-          - AttributeName: locationCode
-            KeyType: HASH
-          - AttributeName: year
+          # concatinated PK, we only access by locationCode + year anyway
+          - AttributeName: locationCodeYear
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: 'TideInfo'
