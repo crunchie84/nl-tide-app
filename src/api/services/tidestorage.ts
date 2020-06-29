@@ -24,26 +24,49 @@ export class TideStorage {
    */
   public async getTideInfo(locationCode: string, year: number): Promise<TideInfo | undefined> {
     try {
-      const data = await this.docClient
+      const record = await this.docClient
         .get({
           TableName: TIDE_INFO_TABLE_NAME,
           Key: {
             [TIDE_INFO_TABLE_PK_NAME]: formatPrimaryKey(locationCode, year),
           },
         })
-        .promise()
-        .then((result) => {
-          // go from untyped back to typed land, huray!
-          return JSON.parse((result.Item as StoredTideInfoRecord).tideInfoJson) as TideInfo;
-        });
-      return data;
+        .promise();
+
+      // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html#getItem-property
+      // If there is no matching item, GetItem does not return any data and there will be no Item element in the response.
+      if (!record.Item) {
+        return undefined; // no data found
+      }
+
+      // go from untyped back to typed land, huray!
+      return JSON.parse((record.Item as StoredTideInfoRecord).tideInfoJson, dateReviver) as TideInfo;
     } catch (err) {
-      //Log.error('could not fetch data', err);
+      // TODO swap out console with lambda power tools Logger
+      console.error(err);
+      return undefined;
     }
-    return undefined;
   }
 }
 
-function formatPrimaryKey(locationCode: string, year: number){
+function formatPrimaryKey(locationCode: string, year: number) {
   return `${locationCode}_${year}`;
+}
+
+/**
+ * pattern matches ISO date strings 2020-06-29T23:41:03.744Z
+ */
+const isoDatePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z/;
+/**
+ * JSON.parse reviver for ISO formatted date strings
+ * @param key string
+ * @param value any
+ */
+function dateReviver(key, value) {
+  if (typeof value === 'string') {
+    if (isoDatePattern.exec(value)) {
+      return new Date(value);
+    }
+  }
+  return value;
 }
