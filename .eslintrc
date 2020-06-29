@@ -41,7 +41,7 @@
     "import/resolver": {
       "alias": {
         "map": [
-          ["@lib", "./src/lib"]
+          ["@lib", "./src/lib"],
           ["@api", "./src/api"]
         ],
         "extensions": [

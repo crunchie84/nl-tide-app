@@ -16,6 +16,7 @@
     "@types/jest": "^26.0.3",
     "@types/node": "^14.0.14",
     "@types/sinon": "^9.0.4",
+    "@types/xml2js": "^0.4.5",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
     "eslint": "^7.3.1",
@@ -27,7 +28,10 @@
     "jest": "^26.1.0",
     "prettier": "^2.0.5",
     "serverless": "^1.74.0",
+    "serverless-iam-roles-per-function": "^2.0.2",
+    "serverless-offline": "^6.4.0",
     "serverless-plugin-typescript": "^1.1.9",
+    "serverless-prune-plugin": "^1.4.3",
     "serverless-webpack": "^5.3.2",
     "sinon": "^9.0.2",
     "ts-jest": "^26.1.1",
@@ -37,6 +41,8 @@
   },
   "dependencies": {
     "@dazn/lambda-powertools-logger": "^1.24.1",
-    "aws-lambda": "^1.0.6"
+    "aws-lambda": "^1.0.6",
+    "axios": "^0.19.2",
+    "xml2js": "^0.4.23"
   }
 }
