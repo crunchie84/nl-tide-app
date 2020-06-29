@@ -1,4 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
+import Log from '@dazn/lambda-powertools-logger';
+
 import { TideInfo } from '../../lib/common';
 
 const TIDE_INFO_TABLE_NAME = 'TideInfo';
@@ -42,8 +44,7 @@ export class TideStorage {
       // go from untyped back to typed land, huray!
       return JSON.parse((record.Item as StoredTideInfoRecord).tideInfoJson, dateReviver) as TideInfo;
     } catch (err) {
-      // TODO swap out console with lambda power tools Logger
-      console.error(err);
+      Log.error('Error raised while retrieving tide info from datastore, returning undefined response', { locationCode, year }, err);
       return undefined;
     }
   }

@@ -3,6 +3,7 @@
  */
 import { Handler, Context } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
+import Log from '@dazn/lambda-powertools-logger';
 
 import { TideLocations, TideInfo, Location } from '../../../lib/common';
 
@@ -21,9 +22,10 @@ interface TideDateResponse extends TideInfo {
 
 export const handler: Handler = async (event: getTideHandlerEvent, context: Context) => {
   //TODO: Can we expect the pathparameters to be passed due to apigateway?
-  const location = TideLocations.find((location) => location.code === event.pathParameters.locationcode);
+  const locationCode = event.pathParameters.locationcode;
+  const location = TideLocations.find((location) => location.code === locationCode);
   if (location === undefined) {
-    return locationNotFoundResponse();
+    return locationNotFoundResponse(locationCode);
   }
 
   // parse date
@@ -36,7 +38,7 @@ export const handler: Handler = async (event: getTideHandlerEvent, context: Cont
   const tideInfo = await storage.getTideInfo(location.code, year);
   if (!tideInfo) {
     // invoke background process to start downloading it
-    return locationTideInfoQueuedForDownloadResponse();
+    return locationTideInfoQueuedForDownloadResponse(location.code, year);
   }
 
   return tideInfoResponse({
@@ -46,17 +48,20 @@ export const handler: Handler = async (event: getTideHandlerEvent, context: Cont
 };
 
 function tideInfoResponse(data: TideDateResponse) {
+  Log.debug('Returning tide info for location', { locationCode: data.location.code });
   return createResponseObject(200, data);
 }
 
 /**
  * response when the tide info is not yet present in our API
  */
-function locationTideInfoQueuedForDownloadResponse() {
+function locationTideInfoQueuedForDownloadResponse(locationCode, year) {
+  Log.debug('Queued download of tide info for location', { locationCode, year});
   return createResponseObject(201, {});
 }
 
-function locationNotFoundResponse() {
+function locationNotFoundResponse(locationCode) {
+  Log.debug('Location not found', { locationCode });
   return createResponseObject(404, {});
 }
 
