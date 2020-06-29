@@ -5,7 +5,7 @@ import { Handler, Context } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
 import Log from '@dazn/lambda-powertools-logger';
 
-import { TideLocations, TideInfo, Location } from '../../../lib/common';
+import { TideLocations, TideInfo, Location } from '@lib/common';
 
 import { TideStorage } from '../../services/tidestorage';
 
@@ -20,8 +20,8 @@ interface TideDateResponse extends TideInfo {
   location: Location;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler: Handler = async (event: getTideHandlerEvent, context: Context) => {
-  //TODO: Can we expect the pathparameters to be passed due to apigateway?
   const locationCode = event.pathParameters.locationcode;
   const location = TideLocations.find((location) => location.code === locationCode);
   if (location === undefined) {
@@ -56,7 +56,7 @@ function tideInfoResponse(data: TideDateResponse) {
  * response when the tide info is not yet present in our API
  */
 function locationTideInfoQueuedForDownloadResponse(locationCode, year) {
-  Log.debug('Queued download of tide info for location', { locationCode, year});
+  Log.debug('Queued download of tide info for location', { locationCode, year });
   return createResponseObject(201, {});
 }
 
