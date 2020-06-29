@@ -31,8 +31,4 @@ Note that the calling lambda function's role needs to include IAM policy AWSLamb
 
 sls deploy --config src/api/serverless.yml --aws-profile marks-playground
 sls invoke local --function getLocations --config src/api/serverless.yml
-
-
-https://github.com/prisma-labs/serverless-plugin-typescript
-
--> add webpack to tree-shake the serverless lambdas before deployment
+sls offline --config src/api/serverless.yml

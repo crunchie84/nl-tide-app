@@ -8,6 +8,7 @@ custom:
     number: 3
 
 plugins:
+  - serverless-offline
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-prune-plugin

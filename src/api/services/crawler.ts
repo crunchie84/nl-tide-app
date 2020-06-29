@@ -77,9 +77,11 @@ export async function mapXmlToJson(xml: any): Promise<Array<TideRecord>> {
     return new Date(`${year}-${month}-${day}T${hour}:${minute}:00+01:00`);
   };
 
-  return (xml['astronomical-tide'].values[0].value as Array<{ datetime: Array<string>, tide: Array<string>, val: Array<string> }>).map((el) => {
+  return (xml['astronomical-tide'].values[0].value as Array<{ datetime: Array<string>, tide: Array<string>, val: Array<string> }>).map((el, idx) => {
+    // sometimes its a simple (xml) object, sometimes the value is an object in which the value is inside property '_'
+    const rawdate = typeof el.datetime[0] === 'string' ? el.datetime[0] : el.datetime[0]['_'];
     return {
-      at: parseDate(el.datetime[0]),
+      at: parseDate(rawdate),
       tide: el.tide[0] === 'LW' ? 'LW' : 'HW',
       elevation: parseInt(el.val[0], 10)
     };

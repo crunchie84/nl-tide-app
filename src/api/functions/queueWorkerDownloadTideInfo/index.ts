@@ -7,10 +7,8 @@ import { downloadTideSourceInfo, parseXml, mapXmlToJson } from '../../services/c
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-explicit-any
 export const handler: Handler = async (event: any, context: Context) => {
-  const locationCode = '';//TODO
+  const locationCode = 'ROTTDM-Rotterdam';//TODO
   const year = 2020; //TODO
-  Log.info('Going to download tide info', { locationCode, year });
-
   try {
     const raw = await downloadTideSourceInfo(locationCode, year);
     const parsed = await parseXml(raw.data);

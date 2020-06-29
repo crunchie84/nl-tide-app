@@ -6,3 +6,11 @@ events:
   # https://www.serverless.com/framework/docs/providers/aws/events/streams/
   # for now: no events configured, we will trigger this lambda
   # directly by invoking an event to it from our api lambda
+  - http:
+      path: /api/download/{locationcode}/{date}
+      method: get
+      request:
+        parameters:
+          paths:
+            locationcode: true
+            date: true
