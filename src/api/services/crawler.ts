@@ -1,7 +1,7 @@
 import axios from 'axios';
 import xml2js from 'xml2js';
 import Log from '@dazn/lambda-powertools-logger';
-import { TideRecord } from '@lib/common';
+import { TideInfo, TideRecord } from '@lib/common';
 
 /**
  * Retrieve XML based tide info
@@ -22,24 +22,6 @@ export async function downloadTideSourceInfo(locationCode, year) {
  * @param xml raw string
  */
 export async function parseXml(xml: string): Promise<any> {
-  /*
-<astronomical-tide>
-    <location>Rotterdam</location>
-    <reference>NAP</reference>
-    <timezone>Nederlandse tijd (GMT +1)</timezone>
-    <source>www.getij.nl</source>
-    <values>
-        <value>
-            <datetime>202001010326 </datetime>
-            <tide>LW</tide>
-            <val> -9</val>
-        </value>
-        <value>
-            <datetime>202001010736 </datetime>
-            <tide>HW</tide>
-            <val> 117</val>
-        </value>
-*/
   const parser = new xml2js.Parser();
   return await parser.parseStringPromise(xml);
 }
@@ -49,23 +31,7 @@ export async function parseXml(xml: string): Promise<any> {
  *
  * @param xml raw parsed to json
  */
-export async function mapXmlToJson(xml: any): Promise<Array<TideRecord>> {
-  // "values": [
-  //   {
-  //     "value": [
-  // {
-  //   "datetime": [
-  //     "202001010326 "
-  //   ],
-  //   "tide": [
-  //     "LW"
-  //   ],
-  //   "val": [
-  //     " -9"
-  //   ]
-  // },
-
-
+export async function mapXmlToJson(xml: any): Promise<TideInfo> {
   const parseDate = (date: string) => {
     // we need to convert dates in form of 202001010326 to 2020-01-01T03:26:00+01:00
     const year = date.substr(0, 4);
@@ -77,13 +43,18 @@ export async function mapXmlToJson(xml: any): Promise<Array<TideRecord>> {
     return new Date(`${year}-${month}-${day}T${hour}:${minute}:00+01:00`);
   };
 
-  return (xml['astronomical-tide'].values[0].value as Array<{ datetime: Array<string>, tide: Array<string>, val: Array<string> }>).map((el, idx) => {
+  const tideRecords = (xml['astronomical-tide'].values[0].value as Array<{ datetime: Array<string>, tide: Array<string>, val: Array<string> }>).map((el, idx) => {
     // sometimes its a simple (xml) object, sometimes the value is an object in which the value is inside property '_'
     const rawdate = typeof el.datetime[0] === 'string' ? el.datetime[0] : el.datetime[0]['_'];
     return {
       at: parseDate(rawdate),
       tide: el.tide[0] === 'LW' ? 'LW' : 'HW',
       elevation: parseInt(el.val[0], 10)
-    };
+    } as TideRecord;
   });
+
+  return {
+    elevationReferencePoint: xml['astronomical-tides'].reference[0] === 'NAP' ? 'NAP' : 'MLS',
+    tides: tideRecords
+  }
 }
