@@ -52,6 +52,10 @@ export class TideStorage {
       return undefined;
     }
   }
+
+  public async putTideInfo(locationCode: string, year: number, info: TideInfo) {
+    // TODO: implement
+  }
 }
 
 function formatPrimaryKey(locationCode: string, year: number) {
