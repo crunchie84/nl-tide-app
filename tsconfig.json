@@ -3,12 +3,28 @@
     "preserveConstEnums": true,
     "strictNullChecks": true,
     "sourceMap": true,
+    "inlineSources": true,
     "allowJs": true,
     "target": "es5",
     "outDir": ".build",
     "moduleResolution": "node",
     "lib": ["es2015"],
     "rootDir": "./",
+    "baseUrl": "./src",
+    // esModuleInterop is needed for (at least) @dazn powertools logger
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "paths": {
+      "@lib/*": ["lib/*"],
+    }
   },
-  "exclude": ["node_modules", "tmp", ".build", ".serverless"]
+  "exclude": [
+    "node_modules",
+    "tmp",
+    ".build",
+    ".serverless",
+    ".webpack",
+    "_warmup",
+    ".vscode"
+  ]
 }

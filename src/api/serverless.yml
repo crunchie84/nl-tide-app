@@ -6,11 +6,20 @@ provider:
   region: eu-central-1
   memorySize: 256 # default 1024 is way to much for nodejs
   logRetentionInDays: 14 # long enough for my purposes
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  tracing:
+    lambda: true
   stackTags:
     GIT_SHA1: ${env:GITHUB_SHA, 'local-non-ci-build'}
     GIT_BRANCH: ${env:GITHUB_REF, 'no-branch-ref-known'}
     APP_VERSION: ${file(./package.json):version}
   iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - xray:PutTraceSegments
+      - xray:PutTelemetryRecords
+    Resource: "*"
   - Effect: "Allow"
     Action:
       - dynamodb:Query
@@ -30,8 +39,8 @@ functions:
   getLocations: ${file(src/api/functions/getLocations/getLocations.yml)}
   getTide: ${file(src/api/functions/getTide/getTide.yml)}
 plugins:
-#  - serverless-webpack
-  - serverless-plugin-typescript
+  - serverless-webpack
+#  - serverless-plugin-typescript
 
 resources:
   Resources:
