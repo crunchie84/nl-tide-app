@@ -1,0 +1,8 @@
+handler: src/api/functions/queueWorkerDownloadTideInfo/index.handler
+description: Background worker to download tide info
+timeout: 15
+events:
+  # maybe use a dynamodb stream instead?
+  # https://www.serverless.com/framework/docs/providers/aws/events/streams/
+  # for now: no events configured, we will trigger this lambda
+  # directly by invoking an event to it from our api lambda

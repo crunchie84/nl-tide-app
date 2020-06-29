@@ -1,4 +1,21 @@
 service: tide-api
+
+custom:
+  serverless-iam-roles-per-function:
+    defaultInherit: true # Each function will inherit the service level roles too.
+  prune: # automatically prune old lambda versions
+    automatic: true
+    number: 3
+
+plugins:
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+  - serverless-prune-plugin
+
+package:
+  individually: true
+  excludeDevDependencies: true
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -32,15 +49,11 @@ provider:
       Fn::GetAtt:
         - TideInfoTable
         - Arn
-package:
-  individually: true
-  excludeDevDependencies: true
+
 functions:
   getLocations: ${file(src/api/functions/getLocations/getLocations.yml)}
   getTide: ${file(src/api/functions/getTide/getTide.yml)}
-plugins:
-  - serverless-webpack
-#  - serverless-plugin-typescript
+  queueWorkerDownloadTideInfo: ${file(src/api/functions/queueWorkerDownloadTideInfo/queueWorkerDownloadTideInfo.yml)}
 
 resources:
   Resources:
