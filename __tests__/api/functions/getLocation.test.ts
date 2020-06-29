@@ -1,10 +1,27 @@
-import { handler } from '../../../src/api/functions/getLocations/getLocations.handler';
+import Log from '@dazn/lambda-powertools-logger';
+import * as sinon from 'sinon';
+
+import { handler } from '@api/functions/getLocations/getLocations.handler';
 import { Context } from 'aws-lambda';
 
 describe('[GET] /api/location', () => {
   const emptyCallback = () => {
     /* no-op */
   };
+
+  let sandbox: sinon.SinonSandbox;
+  beforeAll(() => {
+    sandbox = sinon.createSandbox();
+  });
+  beforeEach(() => {
+    sandbox.stub(Log, 'error');
+    sandbox.stub(Log, 'debug');
+    sandbox.stub(Log, 'info');
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
 
   it('Returns location array', async () => {
     const codeOfLocation = 'ROTTDM-Rotterdam';

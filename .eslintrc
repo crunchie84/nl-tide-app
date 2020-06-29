@@ -42,6 +42,7 @@
       "alias": {
         "map": [
           ["@lib", "./src/lib"]
+          ["@api", "./src/api"]
         ],
         "extensions": [
           ".ts",

@@ -1,15 +1,22 @@
+import Log from '@dazn/lambda-powertools-logger';
 import { DynamoDB } from 'aws-sdk';
 
 import * as sinon from 'sinon';
 
-import { TideStorage } from '../../../src/api/services/tidestorage';
-import { TideInfo } from '../../../src/lib/common';
+import { TideStorage } from '@api/services/tidestorage';
+import { TideInfo } from '@lib/common';
 
 describe('TideStorage()', () => {
   let sandbox: sinon.SinonSandbox;
 
   beforeAll(() => {
     sandbox = sinon.createSandbox();
+  });
+
+  beforeEach(() => {
+    sandbox.stub(Log, 'error');
+    sandbox.stub(Log, 'debug');
+    sandbox.stub(Log, 'info');
   });
 
   afterEach(() => {
