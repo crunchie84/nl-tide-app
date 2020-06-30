@@ -26,5 +26,6 @@ jobs:
       with:
         args: deploy --config src/api/serverless.yml
       env:
+        NODE_OPTIONS: '--max_old_space_size=8192'
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
