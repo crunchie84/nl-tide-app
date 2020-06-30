@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<astronomical-tide>
+    <location>Rotterdam</location>
+    <reference>NAP</reference>
+    <timezone>Nederlandse tijd (GMT +1)</timezone>
+    <source>www.getij.nl</source>
+    <values>
+        <value>
+            <datetime >202001010326  </datetime>
+            <tide>LW</tide>
+            <val>   -9</val>
+        </value>
+        <value>
+            <datetime >202001010736  </datetime>
+            <tide>HW</tide>
+            <val>  117</val>
+        </value>
+        <value>
+            <datetime comment='22'>202001011319  </datetime>
+            <tide>LW</tide>
+            <val>  -51</val>
+        </value>
+    </values>
+</astronomical-tide>
