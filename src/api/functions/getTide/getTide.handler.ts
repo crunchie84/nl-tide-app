@@ -2,7 +2,7 @@
  * return tide info for given location
  */
 import { Handler, Context } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDB, Lambda } from 'aws-sdk';
 import Log from '@dazn/lambda-powertools-logger';
 
 import { TideLocations, TideInfo, Location } from '@lib/common';
@@ -40,7 +40,7 @@ export const handler: Handler = async (event: getTideHandlerEvent, context: Cont
 
   const tideInfo = await storage.getTideInfo(location.code, date.getFullYear());
   if (!tideInfo) {
-    // invoke background process to start downloading it
+    await queueDownloadOfTideInfo(location.code, date.getFullYear());
     return locationTideInfoQueuedForDownloadResponse(location.code, date.getFullYear());
   }
 
@@ -80,4 +80,34 @@ function parseDateStr(date: string): Date | undefined {
     return new Date(ms);
   }
   return undefined;
+}
+
+async function queueDownloadOfTideInfo(locationCode: string, year: number) {
+  const event = {
+    locationCode,
+    year,
+    created: new Date().toISOString(),
+  };
+  Log.info('Queueing download of tideinfo in background', event);
+
+  /**
+   * TODO - this implementation should be swapped out for SNS instead
+   * because this is hard-coding linking lambdas together.
+   *
+   * It merely serves as an example that this is actually possible
+   * albeit ugly/wrong
+   *
+   * https://github.com/crunchie84/nl-tide-app/issues/29
+   */
+  const lambda = new Lambda({
+    region: 'eu-central-1',
+  });
+
+  await lambda
+    .invoke({
+      FunctionName: 'tide-api-dev-queueWorkerDownloadTideInfo',
+      InvocationType: 'Event',
+      Payload: JSON.stringify(event, null, 2),
+    })
+    .promise();
 }
