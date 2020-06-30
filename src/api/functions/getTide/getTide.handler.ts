@@ -8,6 +8,7 @@ import Log from '@dazn/lambda-powertools-logger';
 import { TideLocations, TideInfo, Location } from '@lib/common';
 
 import { TideStorage } from '../../services/tidestorage';
+import { createResponseObject } from '@api/helpers/response';
 
 export interface getTideHandlerEvent {
   pathParameters: {
@@ -63,14 +64,4 @@ function locationTideInfoQueuedForDownloadResponse(locationCode, year) {
 function locationNotFoundResponse(locationCode) {
   Log.debug('Location not found', { locationCode });
   return createResponseObject(404, {});
-}
-
-function createResponseObject(statusCode: number, data) {
-  return {
-    statusCode,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  };
 }
