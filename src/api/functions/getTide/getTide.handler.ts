@@ -9,6 +9,7 @@ import { TideLocations, TideInfo, Location } from '@lib/common';
 
 import { TideStorage } from '../../services/tidestorage';
 import { createResponseObject } from '@api/helpers/response';
+import { queueDownloadOfTideInfo } from '@api/helpers/queue';
 
 export interface getTideHandlerEvent {
   pathParameters: {
@@ -40,7 +41,7 @@ export const handler: Handler = async (event: getTideHandlerEvent, context: Cont
 
   const tideInfo = await storage.getTideInfo(location.code, date.getFullYear());
   if (!tideInfo) {
-    // invoke background process to start downloading it
+    await queueDownloadOfTideInfo(location.code, date.getFullYear());
     return locationTideInfoQueuedForDownloadResponse(location.code, date.getFullYear());
   }
 

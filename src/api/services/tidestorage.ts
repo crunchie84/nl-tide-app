@@ -13,7 +13,7 @@ interface StoredTideInfoRecord {
 }
 
 export class TideStorage {
-  constructor(private docClient: DynamoDB.DocumentClient) { }
+  constructor(private docClient: DynamoDB.DocumentClient) {}
 
   /**
    * Retrieve TideInfo for the given location and the given year.

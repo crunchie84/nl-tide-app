@@ -10,3 +10,9 @@ events:
           paths:
             locationcode: true
             date: true
+iamRoleStatements:
+# needed to trigger background lambda using event
+- Effect: Allow
+  Action:
+    - lambda:InvokeFunction
+  Resource: "*"
