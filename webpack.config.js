@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const slsw = require('serverless-webpack');
+const nodeExternals = require('webpack-node-externals');
 
 // eslint-disable-next-line prettier/prettier
 const isNonProductionBuild = slsw.lib.webpack.isLocal || slsw.lib.options.stage === '' || slsw.lib.options.stage === 'dev';
@@ -15,6 +16,7 @@ module.exports = {
   entry: slsw.lib.entries,
   devtool: isNonProductionBuild ? 'cheap-module-eval-source-map' : 'source-map',
   //externals: [{'aws-sdk': 'commonjs aws-sdk'}],
+  externals: [nodeExternals()],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     symlinks: false,

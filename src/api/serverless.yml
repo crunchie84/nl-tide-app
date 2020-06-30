@@ -6,6 +6,11 @@ custom:
   prune: # automatically prune old lambda versions
     automatic: true
     number: 3
+  webpack:
+    webpackConfig: ./webpack.config.js
+    # needed to let the compilation tree-shake the modules
+    # see https://itnext.io/how-to-optimise-your-serverless-typescript-webpack-eslint-setup-for-performance-86d052284505 for further references
+    includeModules: true
 
 plugins:
   - serverless-offline
