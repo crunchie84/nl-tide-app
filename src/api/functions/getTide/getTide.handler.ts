@@ -29,22 +29,26 @@ export const handler: Handler = async (event: getTideHandlerEvent, context: Cont
     return locationNotFoundResponse(locationCode);
   }
 
-  // parse date
-  //event.pathParameters.date
-  const year = 2020; // TODO - get from date
+  // parse date (quick & dirty for now)
+  const date = parseDateStr(event.pathParameters.date);
+  if (date === undefined) {
+    return invalidDateResponse();
+  }
 
   const docClient = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
   const storage = new TideStorage(docClient);
 
-  const tideInfo = await storage.getTideInfo(location.code, year);
+  const tideInfo = await storage.getTideInfo(location.code, date.getFullYear());
   if (!tideInfo) {
     // invoke background process to start downloading it
-    return locationTideInfoQueuedForDownloadResponse(location.code, year);
+    return locationTideInfoQueuedForDownloadResponse(location.code, date.getFullYear());
   }
 
+  const requestedDate = date.toISOString().substr(0, 10);
   return tideInfoResponse({
     location,
-    ...tideInfo,
+    elevationReferencePoint: tideInfo.elevationReferencePoint,
+    tides: tideInfo.tides.filter((tide) => tide.at.toISOString().substr(0, 10) === requestedDate),
   });
 };
 
@@ -64,4 +68,16 @@ function locationTideInfoQueuedForDownloadResponse(locationCode, year) {
 function locationNotFoundResponse(locationCode) {
   Log.debug('Location not found', { locationCode });
   return createResponseObject(404, {});
+}
+
+function invalidDateResponse() {
+  return createResponseObject(400, { message: 'Date did not represent a valid date. Format yyyy-mm-dd' });
+}
+
+function parseDateStr(date: string): Date | undefined {
+  const ms = Date.parse(date + 'T00:00:00Z');
+  if (!isNaN(ms)) {
+    return new Date(ms);
+  }
+  return undefined;
 }
