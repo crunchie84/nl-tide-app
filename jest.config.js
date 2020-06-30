@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-undef
 module.exports = {
   testEnvironment: 'node',
-  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
+  testMatch: ['**/__tests__/**/+(*.)+(spec|test).+(ts|js)?(x)'],
   transform: {
     '^.+\\.(ts|js|html)$': 'ts-jest',
   },
@@ -11,4 +11,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageReporters: ['html'],
+  testPathIgnorePatterns: ['/node_modules/', '/.build/', '/.serverless'],
 };
