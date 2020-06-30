@@ -11,7 +11,7 @@ export const handler: Handler = async (event: any, context: Context) => {
   const year = 2020; //TODO
   try {
     const raw = await downloadTideSourceInfo(locationCode, year);
-    const parsed = await parseXml(raw.data);
+    const parsed = await parseXml(raw);
     const mapped = await mapXmlToJson(parsed);
     Log.debug('tide info result: ' + JSON.stringify(mapped));
   } catch (err) {
