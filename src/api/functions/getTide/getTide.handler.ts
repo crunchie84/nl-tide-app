@@ -8,6 +8,7 @@ import Log from '@dazn/lambda-powertools-logger';
 import { TideLocations, TideInfo, Location } from '@lib/common';
 
 import { TideStorage } from '../../services/tidestorage';
+import { createResponseObject } from '@api/helpers/response';
 
 export interface getTideHandlerEvent {
   pathParameters: {
@@ -28,22 +29,26 @@ export const handler: Handler = async (event: getTideHandlerEvent, context: Cont
     return locationNotFoundResponse(locationCode);
   }
 
-  // parse date
-  //event.pathParameters.date
-  const year = 2020; // TODO - get from date
+  // parse date (quick & dirty for now)
+  const date = parseDateStr(event.pathParameters.date);
+  if (date === undefined) {
+    return invalidDateResponse();
+  }
 
   const docClient = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
   const storage = new TideStorage(docClient);
 
-  const tideInfo = await storage.getTideInfo(location.code, year);
+  const tideInfo = await storage.getTideInfo(location.code, date.getFullYear());
   if (!tideInfo) {
     // invoke background process to start downloading it
-    return locationTideInfoQueuedForDownloadResponse(location.code, year);
+    return locationTideInfoQueuedForDownloadResponse(location.code, date.getFullYear());
   }
 
+  const requestedDate = date.toISOString().substr(0, 10);
   return tideInfoResponse({
     location,
-    ...tideInfo,
+    elevationReferencePoint: tideInfo.elevationReferencePoint,
+    tides: tideInfo.tides.filter((tide) => tide.at.toISOString().substr(0, 10) === requestedDate),
   });
 };
 
@@ -65,12 +70,14 @@ function locationNotFoundResponse(locationCode) {
   return createResponseObject(404, {});
 }
 
-function createResponseObject(statusCode: number, data) {
-  return {
-    statusCode,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  };
+function invalidDateResponse() {
+  return createResponseObject(400, { message: 'Date did not represent a valid date. Format yyyy-mm-dd' });
+}
+
+function parseDateStr(date: string): Date | undefined {
+  const ms = Date.parse(date + 'T00:00:00Z');
+  if (!isNaN(ms)) {
+    return new Date(ms);
+  }
+  return undefined;
 }

@@ -10,15 +10,10 @@ interface StoredTideInfoRecord {
   locationCodeYear: string;
   // JSON serialized TideInfo object
   tideInfoJson: string;
-  /**
-   * As received from backend system so we do not need to
-   * re-download it when we need to make changes to the JSON
-   */
-  tideInfoRaw: string;
 }
 
 export class TideStorage {
-  constructor(private docClient: DynamoDB.DocumentClient) {}
+  constructor(private docClient: DynamoDB.DocumentClient) { }
 
   /**
    * Retrieve TideInfo for the given location and the given year.
@@ -53,8 +48,28 @@ export class TideStorage {
     }
   }
 
-  public async putTideInfo(locationCode: string, year: number, info: TideInfo) {
-    // TODO: implement
+  public async putTideInfo(locationCode: string, year: number, info: TideInfo): Promise<undefined> {
+    try {
+      const Item: StoredTideInfoRecord = {
+        [TIDE_INFO_TABLE_PK_NAME]: formatPrimaryKey(locationCode, year),
+        tideInfoJson: JSON.stringify(info),
+      };
+
+      await this.docClient
+        .put({
+          TableName: TIDE_INFO_TABLE_NAME,
+          Item,
+        })
+        .promise();
+    } catch (err) {
+      Log.error(
+        'Error raised while retrieving tide info from datastore, returning undefined response',
+        { locationCode, year },
+        err,
+      );
+      throw err;
+    }
+    return undefined;
   }
 }
 
