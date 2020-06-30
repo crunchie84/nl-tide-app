@@ -1,3 +1,6 @@
+import { readFile } from 'fs';
+import { promisify } from 'util';
+
 import * as sinon from 'sinon';
 import axios from 'axios';
 import Log from '@dazn/lambda-powertools-logger';
@@ -7,8 +10,12 @@ import { downloadTideSourceInfo } from '@api/services/crawler';
 describe('Crawler', () => {
   let sandbox: sinon.SinonSandbox;
 
-  beforeAll(() => {
+  let stubXmlResponse = '';
+  let stubParsedJson = {};
+
+  beforeAll(async () => {
     sandbox = sinon.createSandbox();
+    stubXmlResponse = (await promisify(readFile)('./stub-response.xml')).toString('utf8');
   });
 
   beforeEach(() => {
