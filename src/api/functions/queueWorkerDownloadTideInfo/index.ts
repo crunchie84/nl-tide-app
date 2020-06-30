@@ -21,6 +21,7 @@ export const handler: Handler = async (event: DownloadTideInfoEvent, context: Co
     const storage = new TideStorage(docClient);
     await storage.putTideInfo(event.locationCode, event.year, mapped);
 
+    Log.info('Stored new tide info', { locationCode: event.locationCode, year: event.year });
     return createResponseObject(200, { locationCode: event.locationCode, year: event.year });
   } catch (err) {
     Log.error('Error while downloading and mapping tide info', event, err);
