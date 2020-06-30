@@ -3,18 +3,17 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
 
+// eslint-disable-next-line prettier/prettier
+const isNonProductionBuild = slsw.lib.webpack.isLocal || slsw.lib.options.stage === '' || slsw.lib.options.stage === 'dev';
+
 module.exports = {
-  mode:
-    slsw.lib.webpack.isLocal || slsw.lib.options.stage === '' || slsw.lib.options.stage === 'dev'
-      ? 'development'
-      : 'production',
+  mode: isNonProductionBuild ? 'development' : 'production',
   optimization: {
     // do not minimize when deploying to development or running locally
-    minimize:
-      slsw.lib.webpack.isLocal || slsw.lib.options.stage === '' || slsw.lib.options.stage === 'dev' ? false : true,
+    minimize: isNonProductionBuild ? false : true,
   },
   entry: slsw.lib.entries,
-  devtool: 'source-map',
+  devtool: isNonProductionBuild ? 'cheap-module-eval-source-map' : 'source-map',
   //externals: [{'aws-sdk': 'commonjs aws-sdk'}],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
@@ -37,6 +36,18 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
+        exclude: [
+          [
+            path.resolve(__dirname, 'node_modules'),
+            path.resolve(__dirname, '.serverless'),
+            path.resolve(__dirname, '.webpack'),
+            path.resolve(__dirname, '__tests__'),
+          ],
+        ],
+        options: {
+          transpileOnly: true,
+          experimentalWatchApi: true,
+        },
       },
     ],
   },
