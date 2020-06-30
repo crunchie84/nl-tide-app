@@ -34,3 +34,7 @@ Note that the calling lambda function's role needs to include IAM policy AWSLamb
 sls deploy --config src/api/serverless.yml --aws-profile marks-playground
 sls invoke local --function getLocations --config src/api/serverless.yml
 sls offline --config src/api/serverless.yml
+
+# deployed api tmp url aws
+
+https://y4pdrh4ff3.execute-api.eu-central-1.amazonaws.com/dev/api/tide/ROTTDM-Rotterdam/2019-01-02
