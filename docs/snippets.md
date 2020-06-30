@@ -24,6 +24,8 @@ lambda.invoke({
 });
 ```
 
+aws lambda invoke --function-name tide-api-dev-queueWorkerDownloadTideInfo --invocation-type Event --payload '{ "locationCode":"foo","year":"2020" }' response.json --profile marks-playground
+
 Note that the calling lambda function's role needs to include IAM policy AWSLambdaRole. Or, you can add the following statement object to your role's existing policy: '{ "Effect": "Allow", "Action": [ "lambda:InvokeFunction" ], "Resource": ["*"] }`
 
 
