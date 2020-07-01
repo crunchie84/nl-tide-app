@@ -10,6 +10,7 @@ module.exports = {
     '^@api/(.*)$': '<rootDir>/src/api/$1',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageReporters: ['html'],
+  collectCoverage: true,
+  coverageReporters: ['lcov', 'text'],
   testPathIgnorePatterns: ['/node_modules/', '/.build/', '/.serverless'],
 };
